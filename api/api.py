@@ -1,35 +1,55 @@
-from sqlalchemy import create_engine
-from sqlalchemy_utils import database_exists, create_database
-import pymysql
-import pandas as pd
-from flask import Flask, redirect
+from flask import Flask, redirect, jsonify
+import mysql.connector as sql
+import random
 
-sqlEngine = create_engine('mysql+pymysql://root:UZ64pXUFbQ38v5@database-1.cruoyzidkoee.us-east-1.rds.amazonaws.com:3306/wines', pool_recycle=3600)
-if not database_exists(sqlEngine.url):
-    create_database(sqlEngine.url)
+db_connect = sql.connect(host='database-1.c7ext510fslq.us-east-1.rds.amazonaws.com', user='admin', password ='s13sMachineLearning')
+cursor = db_connect.cursor()
+cursor.execute("USE IA;")
 
 app = Flask(__name__)
 
+def getCustomers():
+    cursor.execute("select customer_ID from customer_data limit 10")
+    resultado = cursor.fetchall()
+    return [row[0] for row in resultado]
+
+def getDataCustomer(id):
+    query = "select * from customer_data WHERE customer_ID = '" + id + "'"
+    cursor.execute(query)
+    resultado = cursor.fetchall()
+    resultado = resultado[0]
+    print(resultado)
+    resultado = resultado[3:]
+    print(resultado)
+    return resultado
+
+def getTargetCustomer(id):
+    query = "select target from customer_data WHERE customer_ID = '" + id + "'"
+    cursor.execute(query)
+    resultado = cursor.fetchall()
+    resultado = resultado[0][0]
+    return resultado
+
 @app.route('/')
 def hello_world():
-    dbConnection    = sqlEngine.connect()
-    return 'Hello World'
+    return jsonify(hello = "Wolrd")
 
-@app.route('/localhost')
-def change_to_local():
-    sqlEngine = create_engine('mysql+pymysql://root:root@localhost:3306/IA', pool_recycle=3600)
-    if not database_exists(sqlEngine.url):
-        create_database(sqlEngine.url)
-    return redirect('/')
-   
+@app.route('/customers')
+def customers():
+    return jsonify({"customers": getCustomers()})
+
+@app.route('/random_customer')
+def randomCustomer():
+    return jsonify({"randomCustomer": random.choice(getCustomers())})
+
+@app.route('/id/<id>', methods = ['POST', 'GET'])
+def id(id):
+    return jsonify({"data": getDataCustomer(id), "target": getTargetCustomer(id)})
+
+# @app.route('/localhost')
+# def change_to_local():
+#     db_connect = sql.connect(host='localhost', user='root', password ='root')
+#     return redirect('/')
+
 if __name__ == '__main__':
-   app.run(debug=True)
-#    
-# 
-# if not database_exists(sqlEngine.url):
-    # create_database(sqlEngine.url)
-# 
-# dbConnection    = sqlEngine.connect()
-# 
-# nombre de la tabla
-# tableName   = "winequality_red"
+    app.run(debug=True)
