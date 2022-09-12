@@ -1,6 +1,7 @@
 from flask import Flask, redirect, jsonify
 import mysql.connector as sql
 import random
+from waitress import serve
 
 db_connect = sql.connect(host='database-1.c7ext510fslq.us-east-1.rds.amazonaws.com', user='admin', password ='s13sMachineLearning')
 cursor = db_connect.cursor()
@@ -52,4 +53,5 @@ def id(id):
 #     return redirect('/')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # app.run(debug=True)
+    serve(app, host='0.0.0.0', port=80)
