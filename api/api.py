@@ -45,7 +45,7 @@ def randomCustomer():
 
 @app.route('/id/<id>', methods = ['POST', 'GET'])
 def id(id):
-    return jsonify({"data": getDataCustomer(id), "target": getTargetCustomer(id)})
+    return jsonify({"data": getDataCustomer(id), "target": getTargetCustomer(id), "target_calculated": getTargetCustomer(id)})
 
 # @app.route('/localhost')
 # def change_to_local():
