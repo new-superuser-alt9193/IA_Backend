@@ -3,12 +3,14 @@ import mysql.connector as sql
 import random
 from waitress import serve
 from predictions import makePrediction
+from flask_cors import CORS
 
 db_connect = sql.connect(host='database-1.c7ext510fslq.us-east-1.rds.amazonaws.com', user='admin', password ='s13sMachineLearning')
 cursor = db_connect.cursor()
 cursor.execute("USE IA;")
 
 app = Flask(__name__)
+CORS(app)
 
 def getCustomers():
     cursor.execute("select customer_ID from customer_data limit 10")
