@@ -2,6 +2,7 @@ from flask import Flask, redirect, jsonify
 import mysql.connector as sql
 import random
 from waitress import serve
+from predictions import makePrediction
 
 db_connect = sql.connect(host='database-1.c7ext510fslq.us-east-1.rds.amazonaws.com', user='admin', password ='s13sMachineLearning')
 cursor = db_connect.cursor()
@@ -20,11 +21,8 @@ def getColumnsNames():
     resultado = cursor.fetchall()
     resultado = resultado[3:]
     columnas = []
-    print(resultado)
     for i in resultado:
         columnas.append(i[0])
-        print(i[0])
-    print(columnas)
     return columnas
 
 def getDataCustomer(id):
@@ -56,7 +54,7 @@ def randomCustomer():
 
 @app.route('/id/<id>', methods = ['POST', 'GET'])
 def id(id):
-    return jsonify({"columns": getColumnsNames(),"data": getDataCustomer(id), "target": getTargetCustomer(id), "target_calculated": getTargetCustomer(id)})
+    return jsonify({"columns": getColumnsNames(),"data": getDataCustomer(id), "target": getTargetCustomer(id), "target_calculated": makePrediction([getDataCustomer(id)])})
 
 # @app.route('/localhost')
 # def change_to_local():
