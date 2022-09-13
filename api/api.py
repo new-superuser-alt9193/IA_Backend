@@ -18,8 +18,8 @@ def getColumnsNames():
     query = "SHOW COLUMNS from customer_data;"
     cursor.execute(query)
     resultado = cursor.fetchall()
-    resultado = resultado[0]
-    resultado = resultado[3:]
+    # resultado = resultado[0]
+    # resultado = resultado[3:]
     return resultado
 
 def getDataCustomer(id):
