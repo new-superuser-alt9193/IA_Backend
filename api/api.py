@@ -15,7 +15,7 @@ def getCustomers():
     return [row[0] for row in resultado]
 
 def getColumnsNames():
-    resultado = cursor.column_names
+    resultado = zip(cursor.column_names, cursor.fetchone())
     # resultado = resultado[3:]
     return resultado
 
