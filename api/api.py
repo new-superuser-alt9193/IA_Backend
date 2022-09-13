@@ -18,9 +18,14 @@ def getColumnsNames():
     query = "SHOW COLUMNS from customer_data;"
     cursor.execute(query)
     resultado = cursor.fetchall()
-    resultado = resultado[0][0][0]
-    # resultado = resultado[3:]
-    return resultado
+    resultado = resultado[3:]
+    columnas = []
+    print(resultado)
+    for i in resultado:
+        columnas.append(i[0])
+        print(i[0])
+    print(columnas)
+    return columnas
 
 def getDataCustomer(id):
     query = "select * from customer_data WHERE customer_ID = '" + id + "'"
@@ -59,5 +64,5 @@ def id(id):
 #     return redirect('/')
 
 if __name__ == '__main__':
-    # app.run(debug=True)
-    serve(app, host='0.0.0.0', port=8080)
+    app.run(debug=True)
+    # serve(app, host='0.0.0.0', port=8080)
