@@ -14,14 +14,20 @@ def getCustomers():
     resultado = cursor.fetchall()
     return [row[0] for row in resultado]
 
+def getColumnsNames():
+    query = "SHOW COLUMNS from customer_data"
+    cursor.execute(query)
+    resultado = cursor.fetchall()
+    resultado = resultado[0]
+    resultado = resultado[3:]
+    return resultado
+
 def getDataCustomer(id):
     query = "select * from customer_data WHERE customer_ID = '" + id + "'"
     cursor.execute(query)
     resultado = cursor.fetchall()
     resultado = resultado[0]
-    print(resultado)
     resultado = resultado[3:]
-    print(resultado)
     return resultado
 
 def getTargetCustomer(id):
@@ -45,7 +51,7 @@ def randomCustomer():
 
 @app.route('/id/<id>', methods = ['POST', 'GET'])
 def id(id):
-    return jsonify({"data": getDataCustomer(id), "target": getTargetCustomer(id), "target_calculated": getTargetCustomer(id)})
+    return jsonify({"columns": getColumnsNames(),"data": getDataCustomer(id), "target": getTargetCustomer(id), "target_calculated": getTargetCustomer(id)})
 
 # @app.route('/localhost')
 # def change_to_local():
