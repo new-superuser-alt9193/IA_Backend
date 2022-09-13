@@ -15,10 +15,7 @@ def getCustomers():
     return [row[0] for row in resultado]
 
 def getColumnsNames():
-    query = "SHOW COLUMNS from customer_data"
-    cursor.execute(query)
-    resultado = cursor.fetchall()
-    resultado = resultado[0]
+    resultado = cursor.column_names
     # resultado = resultado[3:]
     return resultado
 
