@@ -13,7 +13,7 @@ app = Flask(__name__)
 CORS(app)
 
 def getCustomers():
-    cursor.execute("select customer_ID from customer_data limit 10")
+    cursor.execute("select customer_ID from customer_data")
     resultado = cursor.fetchall()
     return [row[0] for row in resultado]
 
